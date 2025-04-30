@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: ms-employe
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/employes_db
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8082
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    disable-swagger-default-url: true
+  show-actuator: true
+  paths-to-match: /api/**
+  packages-to-scan: tn.esprit.spring.microservices_Employe.controller
+  cache:
+    disabled: true
+
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG

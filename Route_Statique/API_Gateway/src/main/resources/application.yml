@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      httpserver:
+        websocket:
+          max-frame-payload-length: 65536
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_FIRST
+        - DedupeResponseHeader=Access-Control-Allow-Credentials, RETAIN_FIRST
+      globalcors:
+        add-to-simple-url-handler-mapping: true  # Important for OPTIONS handling
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            exposedHeaders: "X-User-Id, X-User-Email, X-User-Role"
+            allowCredentials: true
+            maxAge: 3600
+      routes:
+        - id: employe-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/employes/**
+        - id: entreprise-service
+          uri: http://localhost:9091
+          predicates:
+            - Path=/api/entreprises/**
+server:
+  port: ${PORT:8085}
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+    reactor.netty.http.server: DEBUG

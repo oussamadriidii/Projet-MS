@@ -25,15 +25,17 @@ services:
     volumes:
       - ./config-repo:/config-repo
 
+
+
   discovery-server:
-    build: ./discovery-server
+    build: ./Eureka_Discovery_Server
     ports:
       - "8761:8761"
     depends_on:
       - config-server
 
   api-gateway:
-    build: ./api-gateway
+    build: ./API_Gateway
     ports:
       - "8085:8085"
     depends_on:
@@ -41,7 +43,7 @@ services:
       - config-server
 
   ms-employe:
-    build: ./ms-employe
+    build: ./MS-Employe
     ports:
       - "8082:8082"
     depends_on:
@@ -50,7 +52,7 @@ services:
       - discovery-server
 
   ms-entreprise:
-    build: ./ms-entreprise
+    build: ./MS-Entreprise
     ports:
       - "9091:9091"
     depends_on:

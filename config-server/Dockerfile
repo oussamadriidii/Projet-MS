@@ -9,3 +9,8 @@ COPY target/*.jar app.jar
 
 # Démarre le microservice
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+
+
+
+

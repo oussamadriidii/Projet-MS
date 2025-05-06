@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+
+  config-server:
+    build: ./config-server
+    ports:
+      - "8888:8888"
+    environment:
+      - GIT_REPO=file:///config-repo
+    volumes:
+      - ./config-repo:/config-repo
+
+  discovery-server:
+    build: ./discovery-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8085:8085"
+    depends_on:
+      - discovery-server
+      - config-server
+
+  ms-employe:
+    build: ./ms-employe
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongo
+      - config-server
+      - discovery-server
+
+  ms-entreprise:
+    build: ./ms-entreprise
+    ports:
+      - "9091:9091"
+    depends_on:
+      - mysql
+      - config-server
+      - discovery-server

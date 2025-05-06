@@ -1,0 +1,13 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/oussamadriidii/config_Repo_MSEntreprise_MSEmploye.git
+          default-label: main  # ou master selon ta branche
+          search-paths: .

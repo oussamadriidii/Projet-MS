@@ -1,9 +1,14 @@
 package tn.esprit.spring.microservices_entreprise.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.microservices_entreprise.dto.EmployeDto;
 import tn.esprit.spring.microservices_entreprise.entities.Entreprise;
+import tn.esprit.spring.microservices_entreprise.producteur.KafkaProducerService;
 import tn.esprit.spring.microservices_entreprise.services.EntrepriseService;
 
 import java.util.List;
@@ -50,4 +55,15 @@ public class EntrepriseController {
     public EmployeDto assignEmploye(@PathVariable Long entrepriseId, @PathVariable String employeId) {
         return entrepriseService.assignEmploye(employeId, entrepriseId);
     }
+
+    @Autowired
+    private KafkaProducerService kafkaProducer;
+
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody Entreprise e) throws JsonProcessingException {
+        // logique de sauvegarde...
+        kafkaProducer.sendEntrepriseCreatedEvent(new ObjectMapper().writeValueAsString(e));
+        return ResponseEntity.ok("Entreprise créée et événement publié");
+    }
+
 }

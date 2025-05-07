@@ -7,3 +7,10 @@ logging:
   level:
     ROOT: INFO
 
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: employe-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
